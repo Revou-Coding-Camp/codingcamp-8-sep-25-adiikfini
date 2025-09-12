@@ -23,7 +23,11 @@
 
     <div id="main-app" class="hidden">
       <header>
-        <div class="logo-icon"></div>
+        <a href="#home" class="logo-container">
+          <div class="logo-icon"></div>
+          <span class="logo-text">NexaTech</span>
+        </a>
+
         <ul>
           <li><a href="#home">Home</a></li>
           <li><a href="#layanan">Layanan</a></li>
@@ -142,13 +146,21 @@
           </div>
         </section>
 
+        <section id="talent" class="talent-section">
+          <h2 class="talent-title">
+            Tingkatkan Inovasi dengan <span>IT Talent Solutions</span>
+          </h2>
+
+          <div class="talent-grid"></div>
+        </section>
+
         <section id="contact">
           <div class="contact-container">
             <div class="contact-heading">
-              <h2>FORM Pendaftaran</h2>
+              <h2>Formulir Pendftaran</h2>
               <p>Isi form di bawah ini dan lihat hasilnya secara langsung.</p>
             </div>
-            <form id="biodata-form" class="contact-card">
+            <form id="biodata-form" class="contact-card" method="POST">
               <div class="form-group">
                 <label for="name">Nama</label>
                 <input
