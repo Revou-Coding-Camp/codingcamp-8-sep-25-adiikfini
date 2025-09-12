@@ -1,22 +1,20 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // =================================================================
-  // === BAGIAN 1: DEKLARASI ELEMEN & FUNGSI UTAMA
-  // =================================================================
-
-  // --- Pemilihan Elemen Awal ---
+  //DEKLARASI ELEMEN & FUNGSI UTAMA
   const welcomeScreen = document.getElementById("welcome-screen");
   const mainApp = document.getElementById("main-app");
   const nameInput = document.getElementById("name-input");
   const enterButton = document.getElementById("enter-button");
   const userNameElement = document.getElementById("user-name");
+  const header = document.querySelector("header");
+  const navLinks = document.querySelectorAll('header a[href^="#"]');
+  const sections = document.querySelectorAll("main section[id]");
 
-  // Di dalam DOMContentLoaded...
 
   // Panggil fungsi ini dari dalam enterHomepage
   const initializeTalentGrid = () => {
     const talentData = [
       {
-        icon: "assets/icons/MobDev.png", // Ganti dengan path ikon Anda
+        icon: "assets/icons/MobDev.png",
         title: "Mobile Developer",
         techLogos: [
           "assets/logos/Kotlin.png",
@@ -75,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     ];
 
-    const gridContainer = document.querySelector(".talent-grid");
+   
     if (!gridContainer) return; // Hentikan jika grid tidak ditemukan
 
     gridContainer.innerHTML = ""; // Kosongkan grid untuk mencegah duplikasi
@@ -206,8 +204,6 @@ document.addEventListener("DOMContentLoaded", function () {
     startAutoplay();
     carousel.addEventListener("mouseenter", stopAutoplay);
     carousel.addEventListener("mouseleave", startAutoplay);
-
-
   };
 
   // --- Fungsi Utama untuk Masuk ke Aplikasi ---
@@ -226,9 +222,7 @@ document.addEventListener("DOMContentLoaded", function () {
     initializeTalentGrid();
   };
 
-  // =================================================================
   // === BAGIAN 2: LOGIKA EKSEKUSI AWAL & EVENT LISTENERS
-  // =================================================================
 
   // --- Logika Welcome Screen ---
   const savedName = localStorage.getItem("userName");
@@ -298,43 +292,49 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // --- Logika Smooth Scrolling ---
-  const navLinks = document.querySelectorAll('header a[href^="#"]');
+  // Fungsi terpusat untuk meng-highlight link yang aktif
+  const activateLink = (id) => {
+    navLinks.forEach((link) => {
+      link.classList.remove("active");
+      // Mencocokkan href link dengan id section
+      if (link.getAttribute("href") === `#${id}`) {
+        link.classList.add("active");
+      }
+    });
+  };
+
+  // --- Logika untuk Smooth Scrolling saat Link di Klik ---
   navLinks.forEach((link) => {
     link.addEventListener("click", function (e) {
       e.preventDefault();
       const targetId = this.getAttribute("href");
       const targetSection = document.querySelector(targetId);
+
       if (targetSection) {
-        targetSection.scrollIntoView({
+        const headerOffset = header.offsetHeight;
+        const elementPosition = targetSection.getBoundingClientRect().top;
+        const offsetPosition =
+          elementPosition + window.pageYOffset - headerOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
           behavior: "smooth",
-          block: "start",
         });
       }
     });
   });
 
-  // --- Logika Active Navigation on Scroll ---
-  const sections = document.querySelectorAll("main section[id]");
-  const navLi = document.querySelectorAll("header ul li a");
-
+  // --- Logika untuk Active Navigation saat Halaman di Scroll ---
   const observerOptions = {
     root: null,
-    rootMargin: "0px",
-    threshold: 0.6,
+    rootMargin: `-${header.offsetHeight}px 0px 0px 0px`,
+    threshold: 0.6, 
   };
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        navLi.forEach((link) => {
-          link.classList.remove("active");
-        });
-        const activeLink = document.querySelector(
-          `header a[href="#${entry.target.id}"]`
-        );
-        if (activeLink) {
-          activeLink.classList.add("active");
-        }
+        activateLink(entry.target.id);
       }
     });
   }, observerOptions);
