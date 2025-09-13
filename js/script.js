@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Panggil fungsi ini dari dalam enterHomepage
   const initializeTalentGrid = () => {
+    const gridContainer = document.getElementById("talent-grid");
     const talentData = [
       {
         icon: "assets/icons/MobDev.png",
